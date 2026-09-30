@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: iris-svm-fastapi
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      # One process runs the three modules (database API under /db, web at /).
+      - key: SERVICE_MODE
+        value: single
+      # Signing key for the login tokens, generated once by Render; never committed.
+      - key: JWT_SECRET
+        generateValue: true
+      # Password of the "admin" account, the only one allowed on the SQL page
+      # (Render generates it; read it in the service's Environment tab).
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      # Prediction history, users and training runs live in the Render Postgres below.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: iris-svm-db
+          property: connectionString
+
+databases:
+  # Free plan: 1 GB, expires 30 days after creation. Must be in the web service's region.
+  - name: iris-svm-db
+    plan: free
+    databaseName: iris_svm
+    user: iris_svm
