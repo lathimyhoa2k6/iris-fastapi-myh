@@ -209,7 +209,7 @@ gói **Free**, không cần thẻ thanh toán.
 
 ### Bước 0 — Chuẩn bị
 
-1. **Code trên GitHub** Render chỉ build từ repo mà tài khoản của bạn truy cập được:
+1. **Code trên GitHub:** Render chỉ build từ repo mà tài khoản của bạn truy cập được:
    - Cách nhanh: mở https://github.com/PiscesSix/iris-svm-fastapi → **Fork**.
    - Hoặc đẩy bản đã clone lên một repo mới (tạo repo trống `iris-svm-fastapi` trên GitHub trước):
 
