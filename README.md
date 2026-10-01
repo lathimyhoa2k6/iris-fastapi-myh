@@ -94,7 +94,7 @@ Dừng cả ba bằng `Ctrl+C`. Các chế độ khác của script (`bash run.s
 | *(không có)* | 3 module trên 3 cổng |
 | `single` | cả 3 module trong một tiến trình ở cổng 8000 (giống Render) |
 | `seed` | chỉ chạy `seed.py` |
-| `train` | cài `requirements-dev.txt`, train lại SVM (`train.py`) + 5 mô hình hồi quy (`train_regression.py`), vẽ lại hình |
+| `train` | cài `requirements-dev.txt`, train lại SVM (`train.py`) + 5 mô hình tuyến tính (`train_regression.py`), vẽ lại hình |
 | `test` | cài `requirements-dev.txt` và chạy `pytest` |
 
 Cấu hình nằm trong `.env` (mẫu: `.env.example`): `JWT_SECRET`, `ADMIN_PASSWORD`, `DB_PATH`, cổng, `CORS_ORIGINS`…
@@ -195,7 +195,7 @@ curl -X POST "https://iris-svm-fastapi-uvo0.onrender.com/predict" \
 bash run.sh test          # hoặc: .venv/Scripts/python -m pytest
 ```
 
-`tests/` kiểm tra đăng ký/đăng nhập (bcrypt, JWT, 401/409/422), dự đoán SVM (contract cũ không đổi) và
+`tests/` kiểm tra đăng ký/đăng nhập (bcrypt, JWT, 401/409/422), dự đoán SVM (contract cũ không đổi) và mô hình
 tuyến tính, đấu trường, badge tốc độ, lưu lịch sử + cô lập theo user, bảng `model_runs`, và 2 file Excel.
 Test chạy trên CSDL SQLite tạm, không đụng `data/app.db` hay mô hình đã commit. Chạy cùng bộ test trên
 PostgreSQL: đặt `TEST_DATABASE_URL=postgresql://...` trỏ tới một CSDL **trống** (không bao giờ dùng CSDL thật;
@@ -282,7 +282,7 @@ Không có biến nào phải chép vào mã nguồn; chạy ở máy thì các 
 
 App tự tạo bảng (migration `db_api/migrations/postgres/001_initial.sql`), rồi `seed.py` tạo:
 tài khoản **`demo` / `demo123`** (công khai, để thử), tài khoản **`admin`** (mật khẩu = `ADMIN_PASSWORD`) và lần
-train đầu của 5 mô hình hồi quy. Chạy lại bao nhiêu lần cũng không tạo trùng; đổi `ADMIN_PASSWORD` thì lần khởi
+train đầu của 5 mô hình tuyến tính. Chạy lại bao nhiêu lần cũng không tạo trùng; đổi `ADMIN_PASSWORD` thì lần khởi
 động sau mật khẩu admin được đặt lại theo giá trị mới.
 
 ### Kiểm tra sau khi deploy
@@ -391,7 +391,7 @@ iris-fastapi/
 │   └── public/           #   index.html, css/, js/, vendor/ (Chart.js, giấy phép), fonts/
 ├── tests/                # pytest
 ├── svm_model.pkl  metrics.json                   # SVM (PHẢI commit)
-├── regression_models.pkl  regression_metrics.json # hồi quy (PHẢI commit)
+├── regression_models.pkl  regression_metrics.json # mô hình tuyến tinh (PHẢI commit)
 ├── requirements.txt  requirements-dev.txt  pytest.ini
 ├── render.yaml  Procfile  .env.example
 ├── data/Iris.csv         # dữ liệu Kaggle uciml/iris (app.db của SQLite cũng nằm đây, không commit)
